@@ -1,0 +1,41 @@
+security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        our_db_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            pattern: ^/
+            anonymous: ~
+            provider: our_db_provider
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800 # 1 week in seconds
+                path: /
+                always_remember_me: true
+            form_login:
+                login_path: login
+                check_path: login
+                success_handler: redirect.after.login
+            logout_on_user_change: true
+            logout:
+                path: logout
+                target: login
+    encoders:
+        App\Entity\User:
+            algorithm: auto
+            cost: 13
+
+    role_hierarchy:
+        ROLE_ADMIN: [ ROLE_FORMATEUR, ROLE_COMPTA ]
+    access_control:
+         - { path: ^/$, roles: IS_AUTHENTICATED_ANONYMOUSLY}
+         - { path: ^/user, roles: [ROLE_FORMATEUR, ROLE_COMPTA]}
+         - { path: ^/admin, roles: ROLE_ADMIN }
+         - { path: ^/formateur, roles: ROLE_FORMATEUR}
+         - { path: ^/compta, roles: ROLE_COMPTA}

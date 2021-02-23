@@ -1,0 +1,174 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-dismissible alert-success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>{{ message }}</strong>
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('successModi') %}
+        <div class="alert alert-dismissible alert-success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>{{ message }}</strong>
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('deleteDep') %}
+        <div class="alert alert-dismissible alert-danger text-dark">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>{{ message }}</strong>
+        </div>
+    {% endfor %}
+    <section id="filtreDetail" class="mt-5 mb-5">
+        <div class="container-fluid" class="mb-5">
+            {% if note.etat.libelle == "Créée" or note.etat.libelle == "Refusée" %}
+                <div class="row">
+                    <div class="col-3 offset-1">
+                        <a href="#modal" data-toggle="modal" data-target="#modal"><input type="button" class="btn btn-info" value="+ Ajouter une dépense"></a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+    <section id="cardDetail">
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row justify-content-between mb-3">
+                        <div class="col-md-6"><h3>Détail de la note de frais</h3><span id="after"></span></div>
+                        <div class="col-md-3">
+                            {% if note.etat.libelle == "Validée" %}
+                                <span class="badge badge-success mb-3">{{ note.etat.libelle }}</span>
+                            {% elseif note.etat.libelle == "Validation en cours" %}
+                                <span class="badge badge-warning mb-3">{{ note.etat.libelle }}</span>
+                            {% elseif  note.etat.libelle == "Refusée"%}
+                                <span class="badge badge-danger mb-3">{{ note.etat.libelle }}</span>
+                            {% else %}
+                                <span class="badge badge-info mb-3">{{ note.etat.libelle }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <h4>{{ note.motif }}</h4>
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">Dépense</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Prix</th>
+                            {% if  (note.etat.libelle == "Créée" or (note.etat.libelle == "Refusée"))%}
+                                <th scope="col">Actions</th>
+                            {% endif %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for depense in depenses %}
+                        <tr class="table-secondary">
+                            <th scope="row">
+                                {% for nom in depense.libelle %}
+                                    {{ nom }}
+                                {% endfor %}
+                            </th>
+                            <td>{{ depense.date | date("d/m/Y") }}</td>
+                            <td>{{ depense.prix }}</td>
+                            {% if  (note.etat.libelle == "Créée") or (note.etat.libelle == "Refusée")%}
+                                <td>
+                                    <div class="row">
+                                        <div class="col-sm-12 col-4 col-md-4 col-lg-4">
+                                            <a href="{{ path('formateur_edit_depense', {'id': depense.id}) }}"><span class="badge badge-pill badge-info">
+                                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pen-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                  <path fill-rule="evenodd" d="M13.498.795l.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001z"/>
+                                                </svg>
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <div class="col-sm-12 col-4 col-md-4 col-lg-4 float-left">
+                                            <form action="{{ path('formateur_delete_depense', {'id': depense.id}) }}" method="post">
+                                                <input type="hidden" name="_methode" value="DELETE">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('SUPDEP'~ depense.id) }}">
+                                                <button onsubmit=" return confirm('Voulez vous supprimer la dépense');" class="btn border-danger">
+                                                    <span class="badge badge-pill badge-danger">
+                                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                      <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
+                                                    </svg>
+                                                    </span>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="row justify-content-between mt-4">
+                        <div class="col-md-4">
+                            <h5>Date de création</h5>
+                            <p>Le :{{ note.dateCreation | date("d/m/Y")}}</p>
+                        </div>
+                        <div class="col-md-4">
+                            {% set somme = 0 %}
+                            {% for t in depenses %}
+                             {% set somme = somme+ t.prix  %}
+                            {% endfor %}
+                            <h5>Total</h5>
+                            <p>
+                                {% for i in total %}
+                                    {% for t in i %}
+                                        {{ t }} €
+                                    {% endfor %}
+                                {% endfor %}
+                            </p>
+                        </div>
+                    </div>
+                    {% if(note.etat.libelle == "Validée") or (note.etat.libelle == "Validation en cours") or (note.etat.libelle == "Remboursée")%}
+                        <button class="btn btn-success btn-block mt-4" disabled="disabled">Soumettre</button>
+                    {% else %}
+                        <a href="{{ path('validation', {'id': note.id}) }}" role="button" class="btn btn-success btn-block mt-4">Soumettre</a>
+                    {% endif %}
+                </div>
+                {% if note.etat.libelle == "Refusée" %}
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">Message</th>
+                            <th scope="col">Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for message in note.messages %}
+                            <td>{{ message.messageText }}</td>
+                            <td>{{ message.date | date("d/m/Y") }}</td>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+    <div class="modal" id="modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ajouter une dépense</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        {{ form_start(formDep) }}
+                        <div class="col-md-12">
+                            {{ form_widget(formDep) }}
+                        </div>
+                        {{ form_start(formDep) }}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Ajouter</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

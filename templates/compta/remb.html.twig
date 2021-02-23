@@ -1,0 +1,69 @@
+{% extends 'inc/sidebar.html.twig'%}
+{% block containtPage %}
+<div class="container">
+    <div class="row">
+        <div class="well col-xs-10 col-sm-10 col-md-6 col-xs-offset-1 col-sm-offset-1 col-md-offset-3">
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                    <address>
+                        <strong>ENI ECOLE Informatque</strong>
+                        <br>
+                        3 Rue Michel Faraday
+                        <br>
+                        44800 Saint-Herblain
+                        <br>
+                    </address>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 text-right">
+                    <p>
+                        <em>Date: {{ date | date('d/m/Y') }}</em>
+                    </p>
+                    <p>
+                        <em>Facture N°: 34522677W</em>
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="text-center">
+                    <h1>Récaputilatif</h1>
+                </div>
+                </span>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Dépense</th>
+                        <th>#</th>
+                        <th class="text-center">Prix</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for depense in depenses %}
+                        <tr>
+                            {% for nom in depense.libelle %}
+                                <td class="col-md-9"><em></em>{{ nom }}</h4></td>
+                            {% endfor %}
+                            <td class="col-md-1" style="text-align: center"> {{ depense.id}} </td>
+                            <td class="col-md-1 text-center">{{ depense.prix }} €</td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+
+                    <tr>
+                        <td>   </td>
+                        <td>   </td>
+                        {% set somme = 0 %}
+                        {% for depense in note.depenses %}
+                            {% set somme = somme + depense.prix %}
+                        {% endfor %}
+                        <td class="text-right"><h4><strong>Total: </strong></h4></td>
+                        <td class="text-center text-danger"><h4><strong>{{ somme }}€</strong></h4></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <a href="{{ path('compta_facture', {'id': note.id}) }}"><button type="button" class="btn btn-success btn-lg btn-block">PAYER</button></a>
+                </td>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

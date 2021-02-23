@@ -1,0 +1,64 @@
+{% extends 'inc/sidebar.html.twig' %}
+{% block containtPage %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-dismissible alert-success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>{{ message }}</strong>
+        </div>
+    {% endfor %}
+    <div class="container-fluid">
+        <div class="row mt-5">
+            <div class="col-md-5 col-sm-12 col-lg-5">
+                <div class="card border-0 shadow">
+                    <div class="card-body p-4">
+                        <div class="text-block pb-3">
+                            <div class="media align-items-center">
+                                <div class="media-body">
+
+                                    <h4>Détail de la note de frais</h4>
+                                    <p class="mt-3">
+                                        <strong>Motif: </strong> {{ note.motif }}
+                                    </p>
+
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr class="table-dark text-white">
+                                            <th scope="col">Dépense</th>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Prix</th>
+                                            <th scope="col">Justificatif</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for dep in depenses %}
+                                            <tr>
+                                                <th scope="row">
+                                                    {% for nom in dep.libelle %}
+                                                        {{ nom }}
+                                                    {% endfor %}
+                                                </th>
+                                                <td>{{ dep.date | date("d/m/Y") }}</td>
+                                                <td>{{ dep.prix }}</td>
+                                                <td>
+                                                    <embed src="{{ asset('images/depenses/'~dep.justificatif) }}" type="" width="40px" height="50px">
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-primary-light py-4 border-0">
+                        <div class="row">
+                            <div class="col-5">
+                                <a href="{{ path('compta_remboursement', {'id': note.id}) }}"><input type="button" class="btn btn-success btn-block" value="Rembourser"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+    {% for message in app.flashes('successDelete') %}
+        <div class="alert alert-dismissible alert-success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>{{ message }}</strong>
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('successValid') %}
+        <div class="alert alert-dismissible alert-success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>{{ message }}</strong>
+        </div>
+    {% endfor %}
+    <div class="container-fluid">
+        <section id="filtre" class="mb-5">
+            <div class="container">
+                <div class="card mt-5 shadow">
+                    <div class="card-body">
+                        <h4 class="card-title">Trouver une note</h4>
+                        <div class="search-bar mt-5 p-3 p-lg-1 pl-lg-4">
+                            {{ form_start(form_filtre) }}
+                            <div class="row">
+                                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 align-items-center form-group d-flex">{{ form_row(form_filtre.date) }}</div>
+                                <div class="col-xl-4 col-lg-3 col-md-4 col-sm-6 col-12 align-items-center form-group d-flex">{{ form_row(form_filtre.etat) }}</div>
+                                <div class="col-xl-4 col-lg-3 col-md-4 col-sm-6 col-12 align-items-center form-group d-flex">
+                                    <button type="submit" class="btn btn-primary btn-block rounded-xl h-100">Recherche</button></div>
+                            </div>
+                            {{ form_end(form_filtre) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+        <section id="card" class="mt-5">
+            <div class="container-fluid">
+                <h2>Mes notes de frais</h2>
+                <span id="after"></span>
+                <div class="row mt-5">
+                    {% for note in notes %}
+                        <div class="col-12 col-sm-12 col-md-6 col-xl-4">
+                            <div class="card mb-3" style="max-width: 25rem;">
+                                <div class="card-header bg-white">
+                                    <div class="row justify-content-between">
+                                        <div class="col-sm-5">
+                                            {% if note.etat.libelle == "Validée" %}
+                                                <span class="badge badge-success mb-3">{{ note.etat.libelle }}</span>
+                                            {% elseif note.etat.libelle == "Validation en cours" %}
+                                                <span class="badge badge-warning mb-3">{{ note.etat.libelle }}</span>
+                                            {% elseif  note.etat.libelle == "Refusée"%}
+                                                <span class="badge badge-danger mb-3">{{ note.etat.libelle }}</span>
+                                            {% else %}
+                                                <span class="badge badge-info mb-3">{{ note.etat.libelle }}</span>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <div class="dropdown">
+                                                <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                                                    </svg>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    {% if (note.etat.libelle == "Créée") or (note.etat.libelle == "Refusée")%}
+                                                        <a href="{{ path('formateur_detail', {'id': note.id}) }}" class="dropdown-item">
+                                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                                                                <path fill-rule="evenodd" d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+                                                            </svg>
+                                                            Détail
+                                                        </a>
+                                                        <a href="{{ path('formateur_edit', {'id': note.id}) }}" class="dropdown-item">
+                                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pen-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                                <path fill-rule="evenodd" d="M13.498.795l.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001z"/>
+                                                            </svg>
+                                                            Modifier
+                                                        </a>
+                                                        <form action="{{ path('formateur_delete_note', {'id': note.id}) }}" method="post">
+                                                            <input type="hidden" name="_methode" value="DELETE">
+                                                            <input type="hidden" name="_token" value="{{ csrf_token('SUPNOTE'~ note.id) }}">
+                                                            <button type="submit" id="btnSup" class="btn btn-outline-danger w-100" onsubmit=" return confirm('Voulez vous supprimer la note ?')">
+                                                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
+                                                                </svg>
+                                                                Supprimer
+                                                            </button>
+                                                        </form>
+                                                    {% else %}
+                                                        <a href="{{ path('formateur_detail', {'id': note.id}) }}" class="dropdown-item">
+                                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                                                                <path fill-rule="evenodd" d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+                                                            </svg>
+                                                            Détail
+                                                        </a>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <h4 class="card-title">{{ note.lieu.nom }}</h4>
+                                    <p class="card-text">{{ note.motif }}</p>
+                                    <div class="row align-items-center">
+                                        <div class="col-sm-12 col-md-6 col-12">
+                                            <p class="card-text">Le {{ note.dateCreation | date('d/m/Y')}}</p>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <p class="card-text">
+                                                {% set somme = 0 %}
+                                                {% for depense in note.depenses %}
+                                                    {% set somme = somme + depense.prix %}
+                                                {% endfor %}
+                                                {% if somme == 0 %}
+                                                    <span class="text-danger">Aucune dépense !</span>
+                                                {% else %}
+                                                    <div class="h6 text-primary">Total : {{ somme }} €</div>
+                                                {% endif %}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {{ knp_pagination_render(notes) }}
+        </section>
+{% endblock %}

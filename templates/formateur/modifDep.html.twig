@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-5">
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <button type="submit" class="btn btn-block btn-success">Valider</button>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <a href=javascript:history.go(-1)><input type="button" class="btn btn-block btn-primary" value="Retour"></a>
+                </div>
+            </div
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}

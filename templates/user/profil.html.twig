@@ -1,0 +1,126 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-md-4 col-xl-3">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Profil</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        {% if app.user.image == null %}
+                            <img src="{{ asset('images/imgUser.png') }}" alt="Stacie Hall" class="img-fluid rounded-circle mb-2 hoverZoomLink" width="128" height="128">
+                        {% else %}
+                            <img src="{{ asset('images/users/'~app.user.image) }}" alt="Stacie Hall" class="img-fluid rounded-circle mb-2 hoverZoomLink" width="128" height="128">
+                        {% endif %}
+                        <h5 class="card-title mb-0">{{ app.user.nom | upper }} {{ app.user.prenom }}</h5>
+                        <div class="text-muted mb-2">
+                            {% for role in user.roles %}
+                                {% if role == 'ROLE_FORMATEUR' %}
+                                    <p>FORMATEUR</p>
+                                {% elseif role == 'ROLE_COMPTA' %}
+                                    <p>COMPTABLE</p>
+                                {% else %}
+                                    <p>ADMINISTRATEUR</p>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <hr class="my-0">
+                    <div class="card-body">
+                        <h5 class="h6 card-title">A propos</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone-fill" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/>
+                                </svg>
+                                {{ app.user.telephone }}
+                            </li>
+                            <li class="mb-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
+                                    <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z"/>
+                                </svg>
+                                {{ app.user.email }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8 col-xl-9 mb-5">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Actions</h5>
+                    </div>
+                    <div class="row ">
+
+                        <!-- End XP Col -->
+                        <div class="col-md-6 col-lg-6 col-xl-3">
+                            <div class="card bg-primary m-b-30">
+                                <div class="card-body">
+                                    <div class="xp-widget-box">
+                                        <div class="float-left">
+                                            <h4 class="xp-counter text-white text-center">Mot de passe</h4>
+                                            <a href="#" role="button" class="btn btn-warning btn-block center">Modifier le mote de passe</a>
+                                        </div>
+                                        <div class="float-right">
+                                            <div class="xp-widget-icon xp-widget-icon-bg bg-white">
+                                                <i class="mdi mdi-file-document font-30 text-primary"></i>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End XP Col -->
+
+                        <!-- End XP Col -->
+                        <div class="col-md-6 col-lg-6 col-xl-3">
+                            <div class="card bg-success m-b-30">
+                                <div class="card-body">
+                                    <div class="xp-widget-box">
+                                        <div class="float-left">
+                                            <h4 class="xp-counter text-white">Profil</h4>
+                                            <a href="#" role="button" class="btn btn-primary btn-block center">Modifier mon profil</a>
+                                        </div>
+                                        <div class="float-right">
+                                            <div class="xp-widget-icon xp-widget-icon-bg bg-white">
+                                                <i class="mdi mdi-currency-usd font-30 text-success"></i>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End XP Col -->
+
+                        <!-- End XP Col -->
+                        <div class="col-md-6 col-lg-6 col-xl-3">
+                            <div class="card bg-warning m-b-30">
+                                <div class="card-body">
+                                    <div class="xp-widget-box">
+                                        <div class="float-left">
+                                            <h4 class="xp-counter text-white">Mes notes</h4>
+                                            <a href="#" role="button" class="btn btn-info btn-block center">Toutes mes notes</a>
+                                        </div>
+                                        <div class="float-right">
+                                            <div class="xp-widget-icon xp-widget-icon-bg bg-white">
+                                                <i class="mdi mdi-account-multiple font-30 text-warning"></i>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

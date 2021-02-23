@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+    {% if edit %}
+        Modifier
+    {% else %}
+        Ajout d'une note
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="row mt-5">
+        <div class="col-4 offset-4">
+            {{ form_start(formNote) }}
+            {{ form_widget(formNote) }}
+            {% if edit %}
+                <div class="row">
+                    <div class="col-md-6 col-12">
+                        <a href=javascript:history.go(-1)><input type="button" class="btn btn-lg btn-block btn-danger" value="Annuler"></a>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <button type="submit" class="btn btn-lg btn-block btn-success">Modifier</button>
+                    </div>
+                </div>
+
+            {% else %}
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <button type="submit" class="btn btn-lg btn-block btn-success">Ajouter</button>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <a href="{{ path('formateur') }}" role="button" class="btn btn-lg btn-block btn-danger">Annuler</a>
+                    </div>
+                </div>
+
+            {% endif %}
+            {{ form_end(formNote) }}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+    Tableau de bord
+{% endblock %}
+{% block body %}
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        <div class="bg-primary border-right text-white" id="sidebar-wrapper">
+            <div class="sidebar-heading">Comptabilité</div>
+            <div class="list-group list-group-flush">
+                <a href="{{ path('compta_toutes_notes') }}" class="list-group-item list-group-item-action bg-primary text-white">
+                    {{ render(controller('App\\Controller\\ComptaController::nbToutesNotes')) }}
+                    Toutes les notes</a>
+                <a href="{{ path('compta_home') }}" class="list-group-item list-group-item-action bg-primary text-white">
+                    {{ render(controller('App\\Controller\\ComptaController::nbNoteAValide')) }}
+                    Notes à validées
+                </a>
+                <a href="{{ path('compta_formateur') }}" class="list-group-item list-group-item-action bg-primary text-white">Formateurs</a>
+                <a href="#" class="list-group-item list-group-item-action bg-primary text-white">Campus</a>
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-animate border-bottom">
+                <button class="btn btn-primary" id="menu-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                    </svg>
+                </button>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </nav>
+
+            <div class="container-fluid">
+                {% block containtPage %}{% endblock %}
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Bootstrap core JavaScript -->
+
+    <script src="{{ asset('/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('/vendor/jquery/jquery.min.js') }}"></script>
+    <!-- Menu Toggle Script -->
+    <script>
+        $("#menu-toggle").click(function(e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+    </script>
+{% endblock %}
+

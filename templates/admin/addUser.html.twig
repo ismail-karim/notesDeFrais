@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+    {% if edit %}
+        Modification de {{ user.nom }}
+    {% else %}
+        Ajouter un profil
+    {% endif %}
+{% endblock %}
+{% block body %}
+    {{ form_start(userForm) }}
+    <div class="jumbotron mt-4">
+        <div class="row">
+            <div class="col-6">
+                {{ form_row(userForm.username) }}
+                {{ form_row(userForm.nom) }}
+                {{ form_row(userForm.prenom) }}
+                {{ form_row(userForm.telephone) }}
+            </div>
+            <div class="col-6">
+                {% if edit %}
+                    {{ form_row(userForm.email) }}
+                    {{ form_row(userForm.roles) }}
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <button type="submit" class="btn btn-block btn-lg btn-success">Enregistrer</button>
+                </div>
+                <div class="col-6">
+                    <a href="{{ path('admin_list') }}" class="btn btn-block btn-lg btn-danger">Annuler</a>
+                </div>
+            </div>
+            {% else %}
+                {{ form_widget(userForm) }}
+                <p><strong>Le mot de passe:</strong> {{ password }}</p>
+                <button type="submit" class="btn btn-lg btn-block btn-success">Ajouter</button>
+            {% endif %}
+        </div>
+    {{ form_end(userForm) }}
+    </div>
+{% endblock %}
+
+

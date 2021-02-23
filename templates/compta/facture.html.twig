@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Facture</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="well col-xs-10 col-sm-10 col-md-6 col-xs-offset-1 col-sm-offset-1 col-md-offset-3">
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-4">
+                        <h1>Facture</h1>
+                        <address>
+                            <strong>ENI ECOLE Informatque</strong>
+                            <br>
+                            3 Rue Michel Faraday
+                            <br>
+                            44800 Saint-Herblain
+                            <br>
+                        </address>
+                    </div>
+                    <div class="col-md-4">
+                        <h2>Formateur</h2>
+                        <p>{{ note.user.nom | upper}} {{ note.user.prenom }}</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-4 text-right">
+                        <p>
+                            <em>Date: {{ date | date('d/m/Y') }}</em>
+                        </p>
+                        <p>
+                            <em>Facture N°: 34522677W</em>
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="text-center">
+                        <h1>Récaputilatif</h1>
+                    </div>
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Dépense</th>
+                            <th>#</th>
+                            <th class="text-center">Prix</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for depense in depenses %}
+                                <tr>
+                                    {% for nom in depense.libelle %}
+                                        <td class="col-md-9"><em></em>{{ nom }}</h4></td>
+                                    {% endfor %}
+                                    <td class="col-md-1" style="text-align: center"> {{ depense.id}} </td>
+                                    <td class="col-md-1 text-center">{{ depense.prix }} €</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% set somme = 0 %}
+                    {% for depense in note.depenses %}
+                        {% set somme = somme + depense.prix %}
+                    {% endfor %}
+                    <h4><strong>Total:  {{ somme }}€ </strong></h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

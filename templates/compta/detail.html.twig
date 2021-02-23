@@ -1,0 +1,144 @@
+{% extends 'inc/sidebar.html.twig' %}
+
+{% block containtPage %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-dismissible alert-success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>{{ message }}</strong>
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('danger') %}
+        <div class="alert alert-dismissible alert-success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>{{ message }}</strong>
+        </div>
+    {% endfor %}
+    <div class="container-fluid">
+        <div class="row mt-5">
+            <div class="col-md-5 col-sm-12 col-lg-5">
+                <div class="card border-0 shadow">
+                    <div class="card-body p-4">
+                        <div class="text-block pb-3">
+                            <div class="media align-items-center">
+                                <div class="media-body">
+
+                                        <h4>Détail de la note de frais</h4>
+                                        <p class="mt-3">
+                                           <strong>Motif: </strong> {{ note.motif }}
+                                        </p>
+
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr class="table-dark text-white">
+                                            <th scope="col">Dépense</th>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Prix</th>
+                                            <th scope="col">Justificatif</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for dep in depenses %}
+                                                <tr>
+                                                    <th scope="row">
+                                                        {% for nom in dep.libelle %}
+                                                            {{ nom }}
+                                                        {% endfor %}
+                                                    </th>
+                                                    <td>{{ dep.date | date("d/m/Y") }}</td>
+                                                    <td>{{ dep.prix }}</td>
+                                                    <td>
+                                                        <div class="row">
+                                                            <div class="col-md-5">
+                                                                <embed src="{{ asset('images/depenses/'~dep.justificatif) }}" type="" width="40px" height="50px">
+                                                            </div>
+                                                            <div class="col-md-5">
+                                                                <a href="{{ asset('images/depenses/'~dep.justificatif) }}" target="_blank">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                                                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                                                        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                                                                    </svg>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-primary-light py-4 border-0">
+                        {% if note.etat.libelle == 'Validée' %}
+                            <a href="{{ path('compta_remboursement', {'id': note.id}) }}"><input type="button" class="btn btn-success btn-block" value="Rembourser"></a>
+                        {% elseif note.etat.libelle == 'Remboursée' %}
+                             <a href="{{ path('compta_facture', {'id': note.id}) }}" target="_blank"><input type="button" class="btn btn-primary btn-block" value="Facture"></a>
+                        {% elseif note.etat.libelle == 'Refusée' %}
+                             <a href="{{ path('compta_toutes_notes') }}"><input type="button" class="btn btn-info btn-block" value="Retours"></a>
+                        {% else %}
+                            <div class="row">
+                                <div class="col-5">
+                                    <a href="{{ path('compta_validation', {'id': note.id}) }}"><input type="button" class="btn btn-success btn-block" value="Valider"></a>
+                                </div>
+                                <div class="col-5">
+                                    <a href="#modal" data-toggle="modal" data-target="#modal"><input type="button" class="btn btn-danger btn-block" value="Refuser"></a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 col-sm-12 col-lg-5">
+                <div class="card border-primary mb-3">
+                    <div class="card-body">
+                        <h4 class="card-title">Détail du formateur</h4>
+                        <div class="row">
+                            <div class="col-md-3">
+                                {% if note.user.image == null %}
+                                    <img src="{{ asset('images/imgUser.png') }}" alt="Image" class="rounded-circle" width="150">
+                                {% else %}
+                                    <img src="{{ asset('images/users/'~note.user.image) }}" alt="Image" class="rounded-circle" width="150">
+                                {% endif %}
+                            </div>
+                            <div class="col-md-7 offset-1">
+                                <p><strong>Nom : </strong>{{ note.user.nom }}</p>
+                                <p><strong>Prénom : </strong>{{ note.user.prenom }}</p>
+                                <p><strong>Email : </strong>{{ note.user.email }}</p>
+                                <p><strong>Téléphone : </strong>{{ note.user.telephone }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour message de refus -->
+
+    <div class="modal" id="modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Message de refus</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        {{ form_start(formRefus) }}
+                        <div class="col-md-12">
+                            {{ form_widget(formRefus) }}
+                        </div>
+                        {{ form_start(formRefus) }}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Valider</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

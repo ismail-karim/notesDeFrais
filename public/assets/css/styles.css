@@ -1,0 +1,41 @@
+html, body{
+    height: 100%;
+}
+#contenu{
+    min-height: 100%;
+    position: relative;
+}
+#card{
+    background-color: #ebf5f7;
+    margin-bottom: 100px;
+}
+
+#after{
+    content: "";
+    border-radius: 4px;
+    position: absolute;
+    width: 24px;
+    height: 4px;
+    background-color: rgb(224 0 52);
+}
+#container{
+    width: 400px;
+}
+
+#navigation{
+    position: absolute;
+    margin: auto;
+}
+
+footer{
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    margin-top: 50px;
+}
+
+@media (max-width: 600px) {
+    .carousel-caption {
+        display: none;
+    }
+}
